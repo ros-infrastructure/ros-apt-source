@@ -1,7 +1,7 @@
 VERSION 0.8
 
 # list of supported platforms per https://www.ros.org/reps/rep-2000.html.
-# This reflects supported platforms for humble, jazzy, kilted and rolling.
+# This reflects supported platforms for noetic, humble, jazzy, kilted and rolling.
 ARG --global supported_ros_platforms = ubuntu:jammy ubuntu:noble ubuntu:focal debian:bookworm debian:buster debian:bullseye
 ARG --global legacy_distros = ubuntu:focal debian:buster debian:bullseye
 
@@ -29,10 +29,16 @@ BUILD_PACKAGE:
   ARG package
   ARG target
   COPY debian debian
-  RUN . /etc/os-release && sed -i "s:~\$CODENAME:~$VERSION_CODENAME:" debian/changelog 
+  RUN . /etc/os-release && sed -i "s:~CODENAME:~$VERSION_CODENAME:" debian/changelog 
+  # Set distribution at build time
+  RUN . /etc/os-release && sed -i "s:\$CODENAME:$VERSION_CODENAME:" debian/changelog 
   COPY README .
   RUN dpkg-buildpackage 
-  RUN lintian 
+  # Lintian on bookworm has an issue resolved in a newer version that has not been backported to bookworm-backports
+  # Don't run lintian on bookworm version of the package since it fails 
+  # Issue: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1033894
+  RUN if  [ ${distro} != "debian:bookworm" ]; then \ 
+      lintian ; fi;  
   SAVE ARTIFACT ../*.deb AS LOCAL output/${target}/
 
 ros-apt-source:
