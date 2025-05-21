@@ -1,5 +1,5 @@
 Name:           ros2-release
-Version:        1.0.0
+Version:        1.1.0
 Summary:        Packages for ROS 2 main repository configuration
 Release: 1%{?release_suffix}
 BuildArch: noarch
@@ -35,5 +35,7 @@ install -Dp -m 0644 -t %{buildroot}%{_sysconfdir}/yum.repos.d %{S:20} %{S:21}
 %config(noreplace) %{_sysconfdir}/yum.repos.d/ros2-testing.repo
  
 %changelog
+* Wed May 21 2025 Clara Berendsen - 1.1.0-1
+- Version bump to added Debian as supported OS on ros-apt-source. Bump here to keep synchrony. 
 * Wed Apr 30 2025 Clara Berendsen - 1.0.0-1
 - Initial package creation.

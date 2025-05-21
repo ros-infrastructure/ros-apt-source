@@ -1,4 +1,10 @@
-ros-apt-source (1.0.0~$CODENAME) UNRELEASED; urgency=medium
+ros-apt-source (1.1.0~CODENAME) $CODENAME; urgency=medium
+
+  * Add Debian support
+
+ -- claraberendsen <claraberendsen@ekumenlabs.com>  Wed, 21 May 2025 12:16:08 -0300
+
+ros-apt-source (1.0.0~CODENAME) UNRELEASED; urgency=medium
 
   * Initial package
 
