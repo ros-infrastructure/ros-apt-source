@@ -39,7 +39,12 @@ BUILD_PACKAGE:
   # Issue: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1033894
   RUN if  [ ${distro} != "debian:bookworm" ]; then \ 
       lintian ; fi;  
+  RUN for f in ../*.deb; do sha256sum $f >> $f.sha256.txt; done 
+  SAVE ARTIFACT ../*.txt AS LOCAL output/${target}/
+  SAVE ARTIFACT ../*.dsc AS LOCAL output/${target}/
+  SAVE ARTIFACT ../*.tar.xz AS LOCAL output/${target}/
   SAVE ARTIFACT ../*.deb AS LOCAL output/${target}/
+  
 
 ros-apt-source:
   ARG --required distro
@@ -137,3 +142,8 @@ integration-check-switch:
   # Verify that main repo is not configured anymore
   # trailing / is important here to avoid matching ros2*
   RUN if ! apt policy | grep $main_repo_regex; then exit 0; else exit 1; fi;
+
+generate-shas:
+  FROM ubuntu:noble
+  RUN 
+  RUN exit 1;
