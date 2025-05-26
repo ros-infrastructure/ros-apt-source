@@ -39,7 +39,7 @@ BUILD_PACKAGE:
   # Issue: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1033894
   RUN if  [ ${distro} != "debian:bookworm" ]; then \ 
       lintian ; fi;  
-  RUN for f in ../*.deb; do sha256sum $f >> $f.sha256.txt; done 
+  RUN cd .. && for f in *.deb; do sha256sum $f >> $f.sha256.txt; done 
   SAVE ARTIFACT ../*.txt AS LOCAL output/${target}/
   SAVE ARTIFACT ../*.dsc AS LOCAL output/${target}/
   SAVE ARTIFACT ../*.tar.xz AS LOCAL output/${target}/

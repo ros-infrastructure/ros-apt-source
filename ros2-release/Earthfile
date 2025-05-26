@@ -12,7 +12,7 @@ BUILD_PACKAGE:
   COPY . /tmp/$package
   RUN rpmbuild -ba ${package}.spec --define "_topdir /tmp/$package/rpm" --define "_sourcedir /tmp/$package"
   RUN rpmlint /tmp/$package/rpm/RPMS/noarch/${package}*.rpm /tmp/$package/rpm/SRPMS/${package}*.src.rpm
-  RUN for f in  /tmp/$package/rpm/RPMS/noarch/${package}*.rpm; do sha256sum $f >> $f.sha256.txt; done 
+  RUN cd /tmp/$package/rpm/RPMS/noarch/ && for f in  ${package}*.rpm; do sha256sum $f >> $f.sha256.txt; done 
   SAVE ARTIFACT /tmp/$package/rpm/RPMS/noarch/${package}*.rpm AS LOCAL output/
   SAVE ARTIFACT /tmp/$package/rpm/RPMS/noarch/${package}*.txt AS LOCAL output/
   SAVE ARTIFACT /tmp/$package/rpm/SRPMS/${package}*.src.rpm AS LOCAL output/
