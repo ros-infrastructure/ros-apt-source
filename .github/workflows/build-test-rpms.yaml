@@ -2,7 +2,7 @@ name: Build RPM packages
 
 on:
   push:
-      branches: ["main"]
+    branches: ["main"]
   pull_request:
     paths:
       - 'ros2-release/**'
