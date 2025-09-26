@@ -22,10 +22,10 @@ dpkgbuild:
 ADD_ARCHIVE_SOURCES:
   FUNCTION
   ARG --required distro
-  RUN if [ ${distro} == "debian:buster"]; then \ 
+  RUN if [ ${distro} = "debian:buster" ]; then \ 
        echo -e "deb http://archive.debian.org/debian/ buster main non-free contrib\ndeb-src http://archive.debian.org/debian/ buster main non-free contrib\ndeb http://archive.debian.org/debian-security/ buster/updates main non-free contrib\ndeb-src http://archive.debian.org/debian-security/ buster/updates main non-free contrib" > /etc/apt/sources.list; \
       fi;  
-  RUN if [ ${distro} == "ubuntu:focal"]; then \ 
+  RUN if [ ${distro} = "ubuntu:focal" ]; then \ 
        echo -e "deb http://archive.debian.org/debian/ buster main non-free contrib\ndeb-src http://archive.debian.org/debian/ buster main non-free contrib\ndeb http://archive.debian.org/debian-security/ buster/updates main non-free contrib\ndeb-src http://archive.debian.org/debian-security/ buster/updates main non-free contrib" > /etc/apt/sources.list; \
       fi;  
 INSTALL_PACKAGE: 
