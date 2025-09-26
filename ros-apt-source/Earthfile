@@ -10,8 +10,8 @@ dpkgbuild:
   FROM ${distro}
   ENV DEBIAN_FRONTEND=noninteractive 
   ENV TZ=Etc/UTC 
-  RUN apt-get update
   DO +ADD_ARCHIVE_SOURCES --distro=${distro}
+  RUN apt-get update
   # Debian buster has an older version of debhelper but the backports archive has a compatible one
   # Use backports version to avoid updating package logic for legacy version.
   RUN if  [ ${distro} = "debian:buster" ]; then \ 
