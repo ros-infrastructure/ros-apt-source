@@ -11,12 +11,24 @@ dpkgbuild:
   ENV DEBIAN_FRONTEND=noninteractive 
   ENV TZ=Etc/UTC 
   RUN apt-get update
+  DO +ADD_ARCHIVE_SOURCES --distro=${distro}
   # Debian buster has an older version of debhelper but the backports archive has a compatible one
   # Use backports version to avoid updating package logic for legacy version.
   RUN if  [ ${distro} = "debian:buster" ]; then \ 
       echo "deb http://archive.debian.org/debian-archive/debian buster-backports main" | tee /etc/apt/sources.list.d/backports.list > /dev/null && \ 
       apt-get update && apt-get install -y  dwz/buster-backports debhelper/buster-backports>12 lintian/buster-backports \ 
       ; else apt-get install -y debhelper lintian ; fi;  
+
+ADD_ARCHIVE_SOURCES:
+  FUNCTION
+  ARG --required version
+  ARG --required distro
+  RUN if [ ${distro} == "debian:buster"]; then \ 
+       echo -e "deb http://archive.debian.org/debian/ buster main non-free contrib\ndeb-src http://archive.debian.org/debian/ buster main non-free contrib\ndeb http://archive.debian.org/debian-security/ buster/updates main non-free contrib\ndeb-src http://archive.debian.org/debian-security/ buster/updates main non-free contrib" > /etc/apt/sources.list.d/archive-buster.list; \
+      fi;  
+  RUN if [ ${distro} == "ubuntu:focal"]; then \ 
+       echo -e "deb http://archive.debian.org/debian/ buster main non-free contrib\ndeb-src http://archive.debian.org/debian/ buster main non-free contrib\ndeb http://archive.debian.org/debian-security/ buster/updates main non-free contrib\ndeb-src http://archive.debian.org/debian-security/ buster/updates main non-free contrib" > /etc/apt/sources.list.d/archive-focal.list; \
+      fi;  
 INSTALL_PACKAGE: 
   FUNCTION
   ARG --required package_dir
@@ -69,15 +81,15 @@ test-aptsource-pkg-install:
   FROM ${distro}
   ENV DEBIAN_FRONTEND=noninteractive 
   ENV TZ=Etc/UTC 
+  DO +ADD_ARCHIVE_SOURCES --distro=${distro}
   LET package = ${repo}-apt-source
   DO +INSTALL_PACKAGE --package=${package} --package_dir=./output/${distro}
-  RUN echo ${repo}
   RUN if  [ -f /usr/share/ros-apt-source/${repo}.sources ] && \ 
           [ -e /usr/share/ros-apt-source/${repo}.sources ] && \ 
           [ -s /usr/share/ros-apt-source/${repo}.sources \
   ]; then exit 0; else exit 1; fi;
   # test that embbeded key is passed
-      RUN  if [ "$legacy_distros" == *"$distro"* ]; then \
+  RUN  if [ "$legacy_distros" == *"$distro"* ]; then \
          if grep 'BEGIN PGP PUBLIC KEY BLOCK' /usr/share/ros-apt-source/${repo}.sources > /dev/null ; then \
             exit 0; \
             else exit 1; \
@@ -97,6 +109,7 @@ ros2-test-repos:
   FROM ${distro}
   ENV DEBIAN_FRONTEND=noninteractive 
   ENV TZ=Etc/UTC 
+  DO +ADD_ARCHIVE_SOURCES --distro=${distro}
   DO +INSTALL_PACKAGE --package=${package} --package_dir=./output/${distro}
   RUN apt update
   RUN apt install ros-rolling-ros-workspace -y
@@ -109,6 +122,7 @@ infra-test-repos:
   FROM ${distro}
   ENV DEBIAN_FRONTEND=noninteractive 
   ENV TZ=Etc/UTC 
+  DO +ADD_ARCHIVE_SOURCES --distro=${distro}
   DO +INSTALL_PACKAGE --package=${package} --package_dir=./output/${distro}
   RUN apt update
   RUN apt install python3-colcon-core -y
@@ -116,10 +130,10 @@ infra-test-repos:
 ros-test-repos:
   ARG distro = ubuntu:focal
   ARG package = ros-apt-source
-
   FROM ${distro}
   ENV DEBIAN_FRONTEND=noninteractive 
   ENV TZ=Etc/UTC 
+  DO +ADD_ARCHIVE_SOURCES --distro=${distro}
   DO +INSTALL_PACKAGE --package=${package} --package_dir=./output/${distro}
   RUN apt update
   RUN apt install ros-noetic-catkin -y
@@ -129,6 +143,7 @@ integration-check-switch:
   ARG distro = ubuntu:noble
   ARG repo = ros2
   FROM ${distro}
+  DO +ADD_ARCHIVE_SOURCES --distro=${distro}
   LET main_repo_regex = "packages.ros.org/"${repo}"/"
   LET testing_repo_regex = "packages.ros.org/"${repo}"-testing/"
   DO +INSTALL_PACKAGE --package=${repo}-apt-source --package_dir=./output/${distro}
@@ -143,7 +158,3 @@ integration-check-switch:
   # trailing / is important here to avoid matching ros2*
   RUN if ! apt policy | grep $main_repo_regex; then exit 0; else exit 1; fi;
 
-generate-shas:
-  FROM ubuntu:noble
-  RUN 
-  RUN exit 1;
