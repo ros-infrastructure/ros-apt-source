@@ -6,8 +6,7 @@ on:
   pull_request:
     paths:
       - 'ros-apt-source/**'
-      - 'Earthfile'
-      - '.github/**'
+      - '.github/workflows/build-test-debs.yaml'
   workflow_dispatch:
 defaults:
     run:
