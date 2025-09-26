@@ -2,11 +2,12 @@ name: Build Deb packages
 
 on:
   push:
-    branches: ["latest"]
+    branches: ["main"]
   pull_request:
     paths:
       - 'ros-apt-source/**'
       - 'Earthfile'
+      - '.github/**'
   workflow_dispatch:
 defaults:
     run:
