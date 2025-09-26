@@ -2,8 +2,11 @@ name: Build RPM packages
 
 on:
   push:
-    branches: ["latest"]
+    branches: ["main"]
   pull_request:
+    paths:
+      - 'ros2-release/**'
+      - '.github/workflows/build-test-rpms.yaml'
   workflow_dispatch:
 defaults:
     run:
