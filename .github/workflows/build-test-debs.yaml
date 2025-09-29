@@ -7,6 +7,7 @@ on:
     paths:
       - 'ros-apt-source/**'
       - 'Earthfile'
+      - '.github/**'
   workflow_dispatch:
 defaults:
     run:
@@ -16,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        distro: [ubuntu:focal,ubuntu:jammy,ubuntu:noble,debian:bookworm,debian:bullseye]
+        distro: [ubuntu:focal,ubuntu:jammy,ubuntu:noble,debian:bookworm,debian:bullseye,debian:trixie]
     steps:
       - uses: actions/checkout@v4
       - name: Setup Earthly
@@ -70,7 +71,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        distro: [debian:bookworm,debian:bullseye]
+        distro: [debian:bookworm,debian:bullseye,debian:trixie]
     steps:
       - uses: actions/checkout@v4
       - name: Setup Earthly
