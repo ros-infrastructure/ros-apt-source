@@ -11,10 +11,12 @@ The supported ROS-OS pairs are:
 | Ubuntu Focal    | *   | *     |
 | Ubuntu Jammy    |     | *     |
 | Ubuntu Noble    |     | *     |
+| Ubuntu Resolute |     | *     |
 | RHEL 8          |     | *     |
 | RHEL 9          |     | *     |
 | Debian Bullseye |     | ^     |
 | Debian Bookworm |     | ^     |
+| Debian Trixie   |     | ^     |
 
 > [*] Testing with ROS debs
 > [^] Testing with Infra pkgs since no debs available.
