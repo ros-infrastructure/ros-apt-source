@@ -108,7 +108,7 @@ ros2-test-repos:
   DO +ADD_ARCHIVE_SOURCES --distro=${distro}
   DO +INSTALL_PACKAGE --package=${package} --package_dir=./output/${distro}
   RUN apt update
-  RUN apt install ros-rolling-ros-workspace -y
+  RUN apt install ros-build-essential -y
 
 infra-test-repos:
   # Test that repo configuration is complete when installing keyring and apt-source packages. 
