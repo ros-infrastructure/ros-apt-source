@@ -35,7 +35,7 @@ install -Dp -m 0644 -t %{buildroot}%{_sysconfdir}/yum.repos.d %{S:20} %{S:21}
 %config(noreplace) %{_sysconfdir}/yum.repos.d/ros2-testing.repo
  
 %changelog
-* Mon Apr 20 2026 Clara Berendsen <claraberendsen@ekumenlabs.com>- 1.2.0-1
+* Mon Apr 20 2026 Clara Berendsen <claraberendsen@ekumenlabs.com> - 1.2.0-1
 - Version bump to add Trixie and Resolute on ros-apt-source. Bump here to keep synchrony.
 * Wed May 21 2025 Clara Berendsen - 1.1.0-1
 - Version bump to add Debian as supported OS on ros-apt-source. Bump here to keep synchrony. 
