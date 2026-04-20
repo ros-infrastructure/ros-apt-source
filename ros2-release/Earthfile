@@ -58,7 +58,7 @@ ros2-test-repos:
       RUN dnf config-manager --set-disabled ros2
       RUN dnf config-manager --set-enabled ros2-testing
   END
-  RUN dnf install -y ros-rolling-ros-workspace
+  RUN dnf install -y ros-build-essential
 
 
 integration-check-switch: 
