@@ -1,3 +1,10 @@
+ros-apt-source (1.2.0~CODENAME) $CODENAME; urgency=medium
+
+  * Add Resolute as Ubuntu target
+  * Add Trixie as Debian target
+
+ -- claraberendsen <claraberendsen@ekumenlabs.com>  Mon, 20 Apr 2026 11:31:21 -0300
+
 ros-apt-source (1.1.0~CODENAME) $CODENAME; urgency=medium
 
   * Add Debian support
