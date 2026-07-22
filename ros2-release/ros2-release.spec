@@ -1,12 +1,22 @@
+%if 0%{?fedora:1}
+%global dist_no_ver .fc
+%global repo_distname fedora
+%else
+%global dist_no_ver .el
+%global repo_distname rhel
+%endif
+
 Name:           ros2-release
 Version:        1.2.0
 Summary:        Packages for ROS 2 main repository configuration
-Release: 1%{?release_suffix}
+Release: 1%{dist_no_ver}%{?release_suffix}
 BuildArch: noarch
 License: ASL 2.0
 URL: https://github.com/ros-infrastructure/ros-apt-source
 Source0: README.md
+%if !0%{?fedora:1}
 Requires:  epel-release
+%endif
 
 Source10:       RPM-GPG-KEY-ROS2
 Source20:       ros2.repo
@@ -22,11 +32,14 @@ This package contains the ROS 2 repository configuration and GPG key.
 %setup -q -c -T
 cp -a %{SOURCE0} .
 
+sed 's/$distname/%{repo_distname}/g' %{SOURCE20} > %{basename:%{S:20}}
+sed 's/$distname/%{repo_distname}/g' %{SOURCE21} > %{basename:%{S:21}}
+
 %build
 
 %install
 install -Dp -m 0644 -t %{buildroot}%{_sysconfdir}/pki/rpm-gpg %{S:10}
-install -Dp -m 0644 -t %{buildroot}%{_sysconfdir}/yum.repos.d %{S:20} %{S:21}
+install -Dp -m 0644 -t %{buildroot}%{_sysconfdir}/yum.repos.d %{basename:%{S:20}} %{basename:%{S:21}}
 
 %files
 %doc README.md
