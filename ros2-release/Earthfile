@@ -63,8 +63,8 @@ ros2-test-repos:
   DO +INSTALL_PACKAGE --package=ros2-release --distro=${distro}
   IF [ repo == "ros2-testing" ]
       RUN if command -v dnf5 >/dev/null 2>&1; then \
-        dnf config-manager disable ros2 && \
-        dnf config-manager enable ros2-testing; \
+        dnf config-manager setopt ros2.enabled=0 && \
+        dnf config-manager setopt ros2-testing.enabled=1; \
       else \
         dnf config-manager --disable ros2 && \
         dnf config-manager --enable ros2-testing; \
@@ -82,8 +82,8 @@ integration-check-switch:
   RUN if ! dnf repolist | grep "ros2-testing" ; then exit 0; else exit 1; fi;
 
   RUN if command -v dnf5 >/dev/null 2>&1; then \
-    dnf config-manager disable ros2 && \
-    dnf config-manager enable ros2-testing; \
+    dnf config-manager setopt ros2.enabled=0 && \
+    dnf config-manager setopt ros2-testing.enabled=1; \
   else \
     dnf config-manager --disable ros2 && \
     dnf config-manager --enable ros2-testing; \
