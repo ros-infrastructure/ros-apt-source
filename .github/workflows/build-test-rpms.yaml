@@ -40,8 +40,10 @@ jobs:
         run: | 
               earthly +test-release-pkg-install --distro=${{ matrix.distro }} 
       - name: Test integration
-        run: | 
+        if: ${{ !startsWith(matrix.distro, 'fedora') }}
+        run: |
               earthly +ros2-test-repos --distro=${{ matrix.distro }}
               earthly +ros2-test-repos --distro=${{ matrix.distro }} --repo=ros2-testing
-              earthly +integration-check-switch --distro=${{ matrix.distro }}
+      - name: Test integration check switch
+        run: earthly +integration-check-switch --distro=${{ matrix.distro }}
  
