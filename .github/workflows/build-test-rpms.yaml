@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        distro: [almalinux:8,fedora:43]
+        distro: [almalinux:8, fedora:43]
     steps:
       - uses: actions/checkout@v4
       - name: Setup Earthly
