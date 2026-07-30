@@ -2,7 +2,12 @@ VERSION 0.8
 
 
 rpmbuild:
-  FROM almalinux:8
+  ARG distro = almalinux:8
+  FROM ${distro}
+  RUN if [ "${distro}" == "${distro#fedora}" ]; then \
+    dnf install epel-release -y --refresh && \
+    crb enable; \
+  fi;
   RUN dnf install -y rpmdevtools rpmlint
 
 BUILD_PACKAGE:
@@ -21,20 +26,22 @@ BUILD_PACKAGE:
 INSTALL_PACKAGE: 
   FUNCTION
   ARG --required package
+  ARG --required distro
   # RUN dnf install -y dnf-command\(config-manager\) && dnf config-manager --set-enabled powertools && dnf install -y epel-release
-  COPY +ros2-release/${package}*.noarch.rpm  ./ 
+  COPY (+ros2-release/${package}*.noarch.rpm --distro=${distro}) ./
   RUN dnf install -y ${package}*.rpm 
 
 
 ros2-release:
+  ARG distro = almalinux:8
   FROM +rpmbuild  
-  DO +BUILD_PACKAGE --package=ros2-release 
+  DO +BUILD_PACKAGE --package=ros2-release --distro=${distro}
 
 test-release-pkg-install:
   # Test that ros-release package is installable and that it configures the necessary files
   ARG distro = almalinux:8
   FROM ${distro}
-  DO +INSTALL_PACKAGE --package=ros2-release
+  DO +INSTALL_PACKAGE --package=ros2-release --distro=${distro}
   RUN if  [ -f /etc/yum.repos.d/ros2.repo ] && \ 
           [ -e /etc/yum.repos.d/ros2.repo ] && \ 
           [ -s /etc/yum.repos.d/ros2.repo \
@@ -53,7 +60,7 @@ ros2-test-repos:
   ARG distro = almalinux:8
   ARG repo = ros2
   FROM ${distro}
-  DO +INSTALL_PACKAGE --package=ros2-release
+  DO +INSTALL_PACKAGE --package=ros2-release --distro=${distro}
   IF [ repo == "ros2-testing" ]
       RUN dnf config-manager --set-disabled ros2
       RUN dnf config-manager --set-enabled ros2-testing
@@ -65,7 +72,7 @@ integration-check-switch:
   # Test users are expected to be able to switch between the testing and main repositories seamlessly. 
   ARG distro = almalinux:8
   FROM ${distro}
-  DO +INSTALL_PACKAGE --package=ros2-release
+  DO +INSTALL_PACKAGE --package=ros2-release --distro=${distro}
   RUN dnf repolist | grep "ros2 "
   RUN if ! dnf repolist | grep "ros2-testing" ; then exit 0; else exit 1; fi;
 
