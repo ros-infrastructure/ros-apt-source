@@ -1,3 +1,10 @@
+ros-apt-source (1.3.0~CODENAME) $CODENAME; urgency=medium
+
+  * Add support for Fedora Linux to RPM spec
+  * Embed PGP keys for non-legacy Debian distros for ros2-testing
+
+ -- Scott K Logan <logans@cottsay.net>  Thu, 30 Jul 2026 14:44:19 -0500
+
 ros-apt-source (1.2.0~CODENAME) $CODENAME; urgency=medium
 
   * Add Resolute as Ubuntu target

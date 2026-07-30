@@ -7,7 +7,7 @@
 %endif
 
 Name:           ros2-release
-Version:        1.2.0
+Version:        1.3.0
 Summary:        Packages for ROS 2 main repository configuration
 Release: 1%{dist_no_ver}%{?release_suffix}
 BuildArch: noarch
@@ -48,9 +48,15 @@ install -Dp -m 0644 -t %{buildroot}%{_sysconfdir}/yum.repos.d %{basename:%{S:20}
 %config(noreplace) %{_sysconfdir}/yum.repos.d/ros2-testing.repo
  
 %changelog
+* Thu Jul 30 2026 Scott K Logan <logans@cottsay.net> - 1.3.0-1
+- Add support for Fedora Linux to RPM spec
+- Embed PGP keys for non-legacy Debian distros for ros2-testing
+
 * Mon Apr 20 2026 Clara Berendsen <claraberendsen@ekumenlabs.com> - 1.2.0-1
 - Version bump to add Trixie and Resolute on ros-apt-source. Bump here to keep synchrony.
+
 * Wed May 21 2025 Clara Berendsen - 1.1.0-1
 - Version bump to add Debian as supported OS on ros-apt-source. Bump here to keep synchrony. 
+
 * Wed Apr 30 2025 Clara Berendsen - 1.0.0-1
 - Initial package creation.
